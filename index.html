@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project-Library</title>
+    <link rel="stylesheet" href="./style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+<body>
+    <!-- The overlay -->
+    <div id="myNav" class="overlay">
+    
+        <!-- Button to close the overlay navigation -->
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        
+        <!-- Overlay content -->
+        <div class="overlay-content">
+            <form  id="myForm" class="book-form">
+                <div class="form-flex">
+                    <label for="title">Book name:</label>
+                    <input type="text" id="title" name="title" placeholder="Book name...">
+                </div>
+                <div class="form-flex">
+                    <label for="author">Book author:</label>
+                    <input type="text" id="author" name="author" placeholder="Book author...">
+                </div >
+                <div class="form-flex">
+                    <label for="pages">Pages:</label>
+                    <input type="number" id="pages" placeholder="0" name="pages">
+        
+                </div>
+        
+                <div class="radiobutton">
+                    <p>Have you read a book?</p>
+                    <div class="flexbuttons">
+                        <div><p><input type="radio" id="huey" name="yes_no" value="yes" checked>
+                            <label for="huey">yes</label></p>
+                           
+                        </div>
+                        
+                        <div><p><input type="radio" id="no" name="yes_no" value="no">
+                            <label for="dewey">no</label></p>
+                            
+                        </div>
+                    </div>
+                    
+                </div>
+        
+                <div><input type="submit" value="Add Book"></div>
+        
+            </form>
+        </div>
+            
+        
+          </form>
+          </div>
+        </div>
+  
+  </div>
+    
+    <header>
+        <div class="logo">
+            <h1><i class="fa fa-book" aria-hidden="true"></i>
+            </i>Library</h1>
+        </div>
+        <div class="button">
+            
+            <button onclick="openNav()" class="add-book">
+                <i class="fa fa-plus plus-sign"></i>
+                Add book</button>
+        </div>
+    </header>
+    
+    <div class="main">
+        
+        
+    </div>
+
+    <script src="./index.js" defer></script>
+    <script src="https://use.fontawesome.com/30a34909cc.js"></script>
+</body>
+
+</html>
