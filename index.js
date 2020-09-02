@@ -10,42 +10,57 @@ class Book {
 }
 
 class Library {
-  library = localStorage.getItem("library")
-  ? JSON.parse(localStorage.getItem("library"))
-  : [
-      {
-        title: "Harry Potter - and the Philosopher's Stone",
-        author: "J. K. Rowling",
-        pages: 223,
-        readStatus: "no",
-      },
+  // myLibrary = localStorage.getItem("library") ? JSON.parse(localStorage.getItem("library")) :
+  // [
+  //     {
+  //       title: "Harry Potter - and the Philosopher's Stone",
+  //       author: "J. K. Rowling",
+  //       pages: 223,
+  //       readStatus: "no",
+  //     },
+  // ];
+
+  myLibrary = localStorage.getItem("library") ? JSON.parse(localStorage.getItem("library")) : [
+    // {
+    //   title: "Harry Potter - and the Philosopher's Stone",
+    //   author: "J. K. Rowling",
+    //   pages: 223,
+    //   readStatus: "no",
+    // },
     ];
 
   addBook(book) {
-    this.library.push(book);
+    this.myLibrary.push(book);
   }
 
-  deleteBook(bookId) {
-    this.books.splice(bookId, 1);
+  deleteBook(card) {
+    this.myLibrary.splice([...card.parentElement.children].indexOf(card), 1);
   }
 
   saveToLocalStorage() {
-    localStorage.setItem('library', JSON.stringify(this.library));
+    localStorage.setItem("library", JSON.stringify(this.myLibrary));
+  }
+
+  readStatusYes(bookCard) {
+    this.myLibrary[[...bookCard.parentElement.children].indexOf(this.bookCard)].readStatus = "yes";
   }
 }
 
 class UIcontroller {
   // DOM elements
 
-  library = new Library();
+  myLibrary = new Library();
   book = new Book();
   i = "";
 
   // Render books on the page..
   render() {
-    const books = this.library.library;
+    this.loadEvents();
+    const books = this.myLibrary.myLibrary;
+    console.log(books)
     books.forEach((book) => {
       this.addNewBookUI(book);
+      
     });
   }
 
@@ -65,8 +80,6 @@ class UIcontroller {
           </i></button></div><div class="title">${book.title}</div><div class="author">${book.author}
           </div><div class="pages">${book.pages}</div><div class="button_status"><button class="book_status">${i}</button></div>`;
     main.appendChild(bookCard);
-
-    this.loadEvents();
   }
 
   getNewBook(event) {
@@ -76,8 +89,7 @@ class UIcontroller {
     const title = document.querySelector("#title").value;
     const author = document.querySelector("#author").value;
     const pages = document.querySelector("#pages").value;
-    const readStatus = document.querySelector('input[name="yes_no"]:checked')
-      .value;
+    const readStatus = document.querySelector('input[name="yes_no"]:checked').value;
     // prevent empty fields ...
 
     let bookToInsert = "";
@@ -99,7 +111,7 @@ class UIcontroller {
       };
       // console.log(bookToInsert);
 
-      let bookExists = this.library.library.some(
+      let bookExists = this.myLibrary.myLibrary.some(
         (book) => book.title == bookToInsert.title
       );
       // console.log(bookExists);
@@ -108,11 +120,11 @@ class UIcontroller {
         alert("It already exists");
       } else {
         const newBook = new Book(title, author, pages, readStatus);
-        this.library.addBook(newBook);
+        this.myLibrary.addBook(newBook);
         this.addNewBookUI(newBook);
 
         this.clearFormFields();
-        this.library.saveToLocalStorage();
+        this.myLibrary.saveToLocalStorage();
         
         //saveToLocalStorage();
       }
@@ -128,7 +140,11 @@ class UIcontroller {
     if (el) {
       let card = el.parentElement.parentElement;
       // remove array-element from myLibrary...
-      this.library.library.splice([...card.parentElement.children].indexOf(card), 1);
+      
+      
+      //this.myLibrary.myLibrary.splice([...card.parentElement.children].indexOf(card), 1);
+      
+      this.myLibrary.deleteBook(card);
       //remove DOM of book...
       card.remove();
       
@@ -136,7 +152,7 @@ class UIcontroller {
       // clear local storage and add new myLibrary to local
       
       localStorage.clear();
-      this.library.saveToLocalStorage();
+      this.myLibrary.saveToLocalStorage();
 
       //localStorage.clear();
       //saveToLocalStorage(myLibrary);
@@ -146,37 +162,31 @@ class UIcontroller {
   readStatus(e) {
     if (e.target.classList.contains("book_status")) {
       let bookCard = e.target.parentElement.parentElement;
-      // console.log(e.target.textContent)
-      if (e.target.textContent == "Not read") {
-        e.target.textContent = "Read";
-        this.library.library[
-          [...bookCard.parentElement.children].indexOf(bookCard)
-        ].readStatus = "yes";
-      } else if (e.target.textContent == "Read") {
-        e.target.textContent = "Not read";
-        this.library.library[
-          [...bookCard.parentElement.children].indexOf(bookCard)
-        ].readStatus = "no";
-      }
-      localStorage.clear();
-      this.library.saveToLocalStorage(this.library.library);
-
-      //saveToLocalStorage(myLibrary);
+        if (e.target.textContent == "Not read") {
+          e.target.textContent = "Read";
+          this.myLibrary.myLibrary[[...bookCard.parentElement.children].indexOf(bookCard)].readStatus = "yes";
+          // console.log(this.myLibrary.myLibrary[[...bookCard.parentElement.children].indexOf(bookCard)].readStatus);
+          // console.log(this.myLibrary.myLibrary);
+        } else if (e.target.textContent == "Read") {
+          e.target.textContent = "Not read";
+          this.myLibrary.myLibrary[[...bookCard.parentElement.children].indexOf(bookCard)].readStatus = "no";
+          // console.log(this.myLibrary.myLibrary[[...bookCard.parentElement.children].indexOf(bookCard)].readStatus);
+          // console.log(this.myLibrary.myLibrary);
     }
+    localStorage.clear();
+    this.myLibrary.saveToLocalStorage(this.myLibrary.myLibrary);
+  }
   }
 
 
-
   loadEvents() {
-    document
-      .querySelector(".book-form")
-      .addEventListener("submit", (e) => this.getNewBook(e));
+    document.querySelector(".book-form").addEventListener("submit", (e) => this.getNewBook(e));
 
     document.querySelector(".main").onclick = (ev) => 
       this.addEventsToAllButtons(ev);
 
 
-    document.querySelector(".main").addEventListener("click", (e) => this.readStatus(e));
+    document.querySelector(".main").addEventListener("click", (e) => this.readStatus(e)); 
     
   }
 
